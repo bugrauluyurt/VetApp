@@ -1,17 +1,14 @@
 {
-  "name": "react-redux-boilerplate",
+  "name": "vetapp-frontend",
   "version": "1.0.0",
-  "description": "A minimal react-redux boilerplate with all the best practices",
+  "description": "VetApp - Frontend",
   "repository": {
-    "type": "git",
-    "url": "git://github.com/flexdinesh/react-redux-boilerplate.git"
+    "type": "git"
   },
   "engines": {
     "npm": ">=3",
     "node": ">=5"
   },
-  "author": "Dinesh Pandiyan",
-  "license": "MIT",
   "scripts": {
     "prebuild": "npm run build:clean",
     "build": "cross-env NODE_ENV=production webpack --config config/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",

@@ -53,7 +53,7 @@ class LocalForageService {
         this.instanceStorage[instanceKey].clear();
       });
       this.instanceStorage = {};
-      return Promise;
+      return Promise.resolve();
     }
     return this.instanceStorage[instance].clear().then(() => {
       delete this.instanceStorage[instance];

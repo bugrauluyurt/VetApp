@@ -40,7 +40,7 @@ class AuthService {
 
   checkRefresh() {
     if (!this.isRefreshingToken()) {
-      return Promise;
+      return Promise.resolve();
     }
     return this.tokenRefreshPromise;
   }

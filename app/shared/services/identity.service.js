@@ -6,7 +6,6 @@ import { instance as LocalForage } from './localforage.service';
 class IdentityService {
   connection = ConnectionFactoryService.create();
   login(userName, password) {
-    // @TODO Fix with actual connection
     return new Promise((resolve, reject) => {
       this.connection
         .setPath('/login')

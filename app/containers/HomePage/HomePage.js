@@ -31,8 +31,8 @@ export default class HomePage extends React.PureComponent { // eslint-disable-li
     return (
       <article>
         <Helmet>
-          <title>Home Page</title>
-          <meta name="description" content="A React.js Boilerplate application homepage" />
+          <title>VetApp</title>
+          <meta name="description" content="Homepage" />
         </Helmet>
         <div className="home-page">
           <section className="centered">

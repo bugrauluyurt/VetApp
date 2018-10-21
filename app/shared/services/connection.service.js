@@ -1,12 +1,18 @@
 import axios from 'axios';
 import * as _isObject from 'lodash/isObject';
-import { instance as LoggerService } from './logger.service';
+import * as _find from 'lodash/find';
+import { instance as AuthService } from './auth.service';
+import { instance as LoggerService, constructor as LoggerServiceConstructor } from './logger.service';
+
+import { getFakeToken, users } from '../fakeApiAssets';
 
 class BaseConnection {
   static METHOD_GET = 'get';
   static METHOD_POST = 'post';
   static METHOD_PUT = 'put';
   static METHOD_DELETE = 'delete';
+
+  static INTERCEPTED_URI = ['/login', '/refreshtoken'];
 
   constructor(axiosInstance, serviceUrl) {
     this.serviceUrl = serviceUrl;
@@ -16,6 +22,14 @@ class BaseConnection {
   setPath(url) {
     this.url = url;
     return this;
+  }
+
+  prepareCustomHeaders() {
+    const customHeaders = {};
+    if (this.url !== '/login') {
+      customHeaders.Authorization = `Bearer ${AuthService.getToken()}`;
+    }
+    return customHeaders;
   }
 
   prepareConfig(method, params, options) {
@@ -33,31 +47,76 @@ class BaseConnection {
     return config;
   }
 
-  handleRequestSuccess(successFn) {
-    return (data) => {
-      successFn(data);
-      return data;
+  getInterceptionFutureValue(method, params) {
+    switch (this.url) {
+      case '/login':
+        return new Promise((resolve, reject) => {
+          const user = _find(users, { id: params.id });
+          if (user) {
+            resolve({
+              id: user.id,
+              userName: user.username,
+              email: user.email,
+              password: user.password,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              token: getFakeToken(),
+            });
+          } else {
+            reject(new Error('Username or password is incorrect'));
+          }
+        });
+      case '/refreshtoken':
+        return new Promise((resolve) => {
+          resolve({ ...getFakeToken('refresh') });
+        });
+      default:
+        return undefined;
+    }
+  }
+
+  requestInterception(method, params) {
+    let future;
+    let isIntercepted = false;
+    if (BaseConnection.INTERCEPTED_URI.indexOf(method) !== -1) {
+      isIntercepted = true;
+      const futureValue = this.getInterceptionFutureValue(method, params);
+      if (futureValue) {
+        future = futureValue;
+      }
+    }
+    return {
+      intercepted: isIntercepted,
+      future,
     };
   }
 
-  handleRequestError(errorFn) {
+  handleRequestSuccess() {
+    return (response) => response.data;
+  }
+
+  handleRequestError() {
     return (error) => {
-      LoggerService.log(error);
-      errorFn(error);
+      LoggerService.log(error.message, LoggerServiceConstructor.LOG_TYPE_ERROR);
       return error;
     };
   }
 
-  request(method, params, options, successFn, errorFn) {
+  request(method, params, options) {
+    const requestInterception = this.requestInterception(method, params, options);
+    if (requestInterception.intercepted && requestInterception.future) {
+      return requestInterception.future;
+    }
     const config = this.prepareConfig(method, params, options);
-    return this.http(config).then(this.handleRequestSuccess(successFn)).catch(this.handleRequestError(errorFn));
+    return AuthService.checkRefresh()
+      .then(() => this.http(config).then(this.handleRequestSuccess()).catch(this.handleRequestError()));
   }
 
-  get(successFn, errorFn, params, body, options) {
-    return this.request(BaseConnection.METHOD_GET, params, options, successFn, errorFn);
+  get(params, body, options) {
+    return this.request(BaseConnection.METHOD_GET, params, options);
   }
 
-  post(successFn, errorFn, params, body) {
+  post(params, body) {
     let postBody;
     if (body) {
       if (body instanceof FormData) {
@@ -69,16 +128,20 @@ class BaseConnection {
         });
       }
     }
-    const options = postBody ? { headers: { 'Content-Type': 'multipart/form-data' } } : {};
-    return this.request(BaseConnection.METHOD_POST, params, options, successFn, errorFn);
+    const customHeaders = this.prepareCustomHeaders();
+    if (postBody) {
+      customHeaders['Content-Type'] = 'multipart/form-data';
+    }
+    const options = { headers: customHeaders };
+    return this.request(BaseConnection.METHOD_POST, params, options);
   }
 
-  put(successFn, errorFn, params, body, options) {
-    return this.request(BaseConnection.METHOD_PUT, params, options, successFn, errorFn);
+  put(params, body, options) {
+    return this.request(BaseConnection.METHOD_PUT, params, options);
   }
 
-  delete(successFn, errorFn, params, body, options) {
-    return this.request(BaseConnection.METHOD_DELETE, params, options, successFn, errorFn);
+  delete(params, body, options) {
+    return this.request(BaseConnection.METHOD_DELETE, params, options);
   }
 }
 

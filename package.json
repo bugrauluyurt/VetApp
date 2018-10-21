@@ -41,6 +41,7 @@
     "immutable": "3.8.2",
     "invariant": "2.2.4",
     "ip": "1.1.5",
+    "localforage": "^1.7.2",
     "lodash": "^4.17.10",
     "minimist": "1.2.0",
     "prop-types": "15.6.1",

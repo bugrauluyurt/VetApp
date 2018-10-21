@@ -30,7 +30,7 @@ class AuthService {
       .then((token) => {
         this.tokenRefreshing = false;
         this.setToken(token);
-        LocalForage.getItem('user').then((user) => {
+        return LocalForage.getItem('user').then((user) => {
           const clonedUser = _cloneDeep(user);
           clonedUser.token = token;
           LocalForage.setItem('user', clonedUser);

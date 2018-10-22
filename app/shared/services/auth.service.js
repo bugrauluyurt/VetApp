@@ -1,11 +1,15 @@
 import * as _cloneDeep from 'lodash/cloneDeep';
-import { instance as ConnectionFactoryService } from './connection.service';
+import axios from 'axios';
 import { instance as LocalForage } from './localforage.service';
+import { API_TIMEOUT, BASE_URL } from '../constants';
 
 class AuthService {
   static TOKEN_EXPIRATION_TIME_DEFAULT = 60 * 1000000; // min
   static TOKEN_EXPIRATION_BUFFER = 60 * 1000; // sec
-  connection = ConnectionFactoryService.getConnection();
+  connection = axios.create({
+    baseURL: BASE_URL,
+    timeout: API_TIMEOUT,
+  });
   tokenRefreshing = false;
 
   setToken(token) {
@@ -25,8 +29,7 @@ class AuthService {
   refreshToken() {
     this.tokenRefreshing = true;
     this.tokenRefreshPromise = this.connection
-      .setPath('/refreshtoken')
-      .get({ token: this.token.body })
+      .get('/refreshtoken', { params: { token: this.token.body } })
       .then((token) => {
         this.tokenRefreshing = false;
         this.setToken(token);

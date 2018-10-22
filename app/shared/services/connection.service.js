@@ -5,6 +5,7 @@ import { instance as AuthService } from './auth.service';
 import { instance as LoggerService, constructor as LoggerServiceConstructor } from './logger.service';
 
 import { getFakeToken, users, FAKE_API_RETENTION_TIME } from '../fakeApiAssets';
+import { API_TIMEOUT, BASE_URL } from '../constants';
 
 class BaseConnection {
   static METHOD_GET = 'get';
@@ -150,8 +151,8 @@ class BaseConnection {
 }
 
 class ConnectionFactoryService {
-  static baseURL = process.env.API_URL || 'localhost';
-  static timeout = 5000;
+  static baseURL = BASE_URL;
+  static timeout = API_TIMEOUT;
 
   constructor() {
     this.axiosInstance = axios.create({

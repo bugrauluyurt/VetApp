@@ -5,7 +5,7 @@ import { instance as LocalForage } from './localforage.service';
 class AuthService {
   static TOKEN_EXPIRATION_TIME_DEFAULT = 60 * 1000000; // min
   static TOKEN_EXPIRATION_BUFFER = 60 * 1000; // sec
-  connection = ConnectionFactoryService.create();
+  connection = ConnectionFactoryService.getConnection();
   tokenRefreshing = false;
 
   setToken(token) {

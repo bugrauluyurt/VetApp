@@ -4,7 +4,7 @@ import * as _find from 'lodash/find';
 import { instance as AuthService } from './auth.service';
 import { instance as LoggerService, constructor as LoggerServiceConstructor } from './logger.service';
 
-import { getFakeToken, users } from '../fakeApiAssets';
+import { getFakeToken, users, FAKE_API_RETENTION_TIME } from '../fakeApiAssets';
 
 class BaseConnection {
   static METHOD_GET = 'get';
@@ -53,22 +53,26 @@ class BaseConnection {
         return new Promise((resolve, reject) => {
           const user = _find(users, { id: params.id });
           if (user) {
-            resolve({
-              id: user.id,
-              userName: user.username,
-              email: user.email,
-              password: user.password,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              token: getFakeToken(),
-            });
+            setTimeout(() => {
+              resolve({
+                id: user.id,
+                userName: user.username,
+                email: user.email,
+                password: user.password,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                token: getFakeToken(),
+              });
+            }, FAKE_API_RETENTION_TIME);
           } else {
             reject(new Error('Username or password is incorrect'));
           }
         });
       case '/refreshtoken':
         return new Promise((resolve) => {
-          resolve({ ...getFakeToken('refresh') });
+          setTimeout(() => {
+            resolve({ ...getFakeToken('refresh') });
+          }, FAKE_API_RETENTION_TIME);
         });
       default:
         return undefined;
@@ -98,7 +102,7 @@ class BaseConnection {
   handleRequestError() {
     return (error) => {
       LoggerService.log(error.message, LoggerServiceConstructor.LOG_TYPE_ERROR);
-      return error;
+      throw new Error(error.message);
     };
   }
 
@@ -154,8 +158,15 @@ class ConnectionFactoryService {
       baseURL: ConnectionFactoryService.baseURL,
       timeout: ConnectionFactoryService.timeout,
     });
+    // Creates a generic default connection
+    this.connection = this.create();
   }
 
+  getConnection() {
+    return this.connection;
+  }
+
+  // New connection instance can be created if required
   create() {
     return new BaseConnection(this.axiosInstance, `${ConnectionFactoryService.baseURL}/`);
   }

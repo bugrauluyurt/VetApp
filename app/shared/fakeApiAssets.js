@@ -28,3 +28,5 @@ export function getFakeToken(type) {
   }
   return token;
 }
+
+export const FAKE_API_RETENTION_TIME = 2500;

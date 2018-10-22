@@ -4,7 +4,7 @@ import { instance as LocalForage } from './localforage.service';
 
 
 class IdentityService {
-  connection = ConnectionFactoryService.create();
+  connection = ConnectionFactoryService.getConnection();
   login(userName, password) {
     return new Promise((resolve, reject) => {
       this.connection
@@ -24,7 +24,7 @@ class IdentityService {
     AuthService.destroy();
     return new Promise((resolve, reject) => {
       LocalForage.destroy().then(() => {
-        window.location.href = '/login';
+        // @TODO Push history once localforage is destroyed
         resolve();
       }).catch(() => reject());
     });

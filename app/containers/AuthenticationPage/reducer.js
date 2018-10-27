@@ -11,7 +11,7 @@
  */
 import { fromJS } from 'immutable';
 
-import { LOGIN_USER, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR } from './constants';
+import { SIGNIN_USER, SIGNIN_USER_SUCCESS, SIGNIN_USER_ERROR } from './constants';
 
 // The initial state of the App
 const initialState = fromJS({
@@ -22,15 +22,15 @@ const initialState = fromJS({
 
 function authenticationReducer(state = initialState, action) {
   switch (action.type) {
-    case LOGIN_USER:
+    case SIGNIN_USER:
       return state
         .set('loading', true)
         .set('error', false);
-    case LOGIN_USER_SUCCESS:
+    case SIGNIN_USER_SUCCESS:
       return state
         .set('loading', false)
         .set('userData', action.userData);
-    case LOGIN_USER_ERROR:
+    case SIGNIN_USER_ERROR:
       return state
         .set('loading', false)
         .set('error', true);

@@ -1,18 +1,17 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { instance as IdentityService } from '../../shared/services/identity.service';
-import { LOGIN_USER } from './constants';
-import { loginSuccess, loginError } from './actions';
+import { SIGNIN_USER } from './constants';
+import { signInSuccess, signInError } from './actions';
 
-
-export function* getLoginData(action) {
+export function* getSignInData(action) {
   try {
-    const userData = yield call(IdentityService.login, [action.username, action.password]);
-    yield put(loginSuccess(userData));
+    const userData = yield call(IdentityService.signIn, [action.username, action.password, action.rememberMe]);
+    yield put(signInSuccess(userData));
   } catch (error) {
-    yield put(loginError(error));
+    yield put(signInError(error));
   }
 }
 
 export default function* getLoginDataWatcher() {
-  yield takeLatest(LOGIN_USER, getLoginData);
+  yield takeLatest(SIGNIN_USER, getSignInData);
 }

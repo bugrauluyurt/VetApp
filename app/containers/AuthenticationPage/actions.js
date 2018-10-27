@@ -1,27 +1,27 @@
 import {
-  LOGIN_USER,
-  LOGIN_USER_SUCCESS,
-  LOGIN_USER_ERROR,
+  SIGNIN_USER,
+  SIGNIN_USER_SUCCESS,
+  SIGNIN_USER_ERROR,
 } from './constants';
 
-export function login(username, password) {
+export function signIn(username, password) {
   return {
-    type: LOGIN_USER,
+    type: SIGNIN_USER,
     username,
     password,
   };
 }
 
-export function loginSuccess(userData) {
+export function signInSuccess(userData) {
   return {
-    type: LOGIN_USER_SUCCESS,
+    type: SIGNIN_USER_SUCCESS,
     userData
   };
 }
 
-export function loginError(error) {
+export function signInError(error) {
   return {
-    type: LOGIN_USER_ERROR,
+    type: SIGNIN_USER_ERROR,
     error
   };
 }

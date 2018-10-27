@@ -19,9 +19,8 @@ export const users = [
 
 export function getFakeToken(type) {
   const token = {
-    body: 'fake-jwt-token',
-    type,
-    expirationTime: 60000000,
+    access_token: 'fake-jwt-token',
+    expires_in: 60000000,
   };
   if (type) {
     token.type = type;

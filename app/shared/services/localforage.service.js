@@ -4,7 +4,6 @@ class LocalForageService {
   instanceStorage = {};
 
   static INSTANCE_DEFAULT = 'defaultInstance';
-  static INSTANCE_USER = 'userInstance';
 
   constructor() {
     this.createInstance();

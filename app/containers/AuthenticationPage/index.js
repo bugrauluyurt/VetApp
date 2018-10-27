@@ -2,13 +2,13 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
-import { login } from './actions';
+import { signIn } from './actions';
 import reducer from './reducer';
 import saga from './saga';
 import AuthenticationPage from './AuthenticationPage';
 
 const mapDispatchToProps = (dispatch) => ({
-  onLogin: (username, password) => dispatch(login(username, password)),
+  onSignIn: (username, password, rememberMe) => dispatch(signIn(username, password, rememberMe)),
 });
 
 const withConnect = connect(undefined, mapDispatchToProps);

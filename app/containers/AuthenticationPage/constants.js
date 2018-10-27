@@ -1,4 +1,4 @@
-export const LOGIN_USER = 'VetApp/AuthenticationPage/LOGIN_USER';
-export const LOGIN_USER_SUCCESS = 'VetApp/AuthenticationPage/LOGIN_USER_SUCCESS';
-export const LOGIN_USER_ERROR = 'VetApp/AuthenticationPage/LOGIN_USER_ERROR';
+export const SIGNIN_USER = 'VetApp/AuthenticationPage/SIGNIN_USER';
+export const SIGNIN_USER_SUCCESS = 'VetApp/AuthenticationPage/SIGNIN_USER_SUCCESS';
+export const SIGNIN_USER_ERROR = 'VetApp/AuthenticationPage/SIGNIN_USER_ERROR';
 

@@ -6,6 +6,7 @@ import { instance as LoggerService, constructor as LoggerServiceConstructor } fr
 
 import { getFakeToken, users, FAKE_API_RETENTION_TIME } from '../fakeApiAssets';
 import { API_TIMEOUT, BASE_URL } from '../constants';
+import { API_PATH_SIGNIN } from './identity.service';
 
 class BaseConnection {
   static METHOD_GET = 'get';
@@ -13,7 +14,7 @@ class BaseConnection {
   static METHOD_PUT = 'put';
   static METHOD_DELETE = 'delete';
 
-  static INTERCEPTED_URI = ['/login', '/refreshtoken'];
+  static INTERCEPTED_URI = [API_PATH_SIGNIN, '/refreshtoken'];
 
   constructor(axiosInstance, serviceUrl) {
     this.serviceUrl = serviceUrl;
@@ -27,7 +28,7 @@ class BaseConnection {
 
   prepareCustomHeaders() {
     const customHeaders = {};
-    if (this.url !== '/login') {
+    if (this.url !== API_PATH_SIGNIN) {
       customHeaders.Authorization = `Bearer ${AuthService.getToken()}`;
     }
     return customHeaders;
@@ -50,7 +51,7 @@ class BaseConnection {
 
   getInterceptionFutureValue(method, params) {
     switch (this.url) {
-      case '/login':
+      case API_PATH_SIGNIN:
         return new Promise((resolve, reject) => {
           const user = _find(users, { id: params.id });
           if (user) {

@@ -1,3 +1,4 @@
+import _omit from 'lodash/omit';
 import { instance as ConnectionService } from './connection.service';
 import { AuthToken, instance as AuthService } from './auth.service';
 import { instance as LocalForage } from './localforage.service';
@@ -12,7 +13,8 @@ function handleAuthorizationSuccess(resolve, params) {
     if (!params.rememberMe) {
       resolve(response);
     }
-    const user = { ...response.user, token, rememberMe: params.rememberMe };
+    const filteredData = _omit(response, ['password']);
+    const user = { ...filteredData, token };
     LocalForage.setItem('user', user).then(() => resolve(user));
   };
 }

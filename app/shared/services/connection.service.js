@@ -4,9 +4,8 @@ import * as _find from 'lodash/find';
 import { instance as AuthService } from './auth.service';
 import { instance as LoggerService, constructor as LoggerServiceConstructor } from './logger.service';
 
-import { getFakeToken, users, FAKE_API_RETENTION_TIME } from '../fakeApiAssets';
-import { API_TIMEOUT, BASE_URL } from '../constants';
-import { API_PATH_SIGNIN } from './identity.service';
+import { getFakeToken, users, FAKE_API_RETENTION_TIME, getSignUpResponse, resolveUser } from '../fakeApiAssets';
+import { API_TIMEOUT, BASE_URL, API_PATH_SIGNIN, API_PATH_SIGNUP, API_PATH_REFRESH_TOKEN } from '../constants';
 
 class BaseConnection {
   static METHOD_GET = 'get';
@@ -14,7 +13,7 @@ class BaseConnection {
   static METHOD_PUT = 'put';
   static METHOD_DELETE = 'delete';
 
-  static INTERCEPTED_URI = [API_PATH_SIGNIN, '/refreshtoken'];
+  static INTERCEPTED_URI = [API_PATH_SIGNIN, API_PATH_SIGNIN, API_PATH_REFRESH_TOKEN];
 
   constructor(axiosInstance, serviceUrl) {
     this.serviceUrl = serviceUrl;
@@ -53,24 +52,32 @@ class BaseConnection {
     switch (this.url) {
       case API_PATH_SIGNIN:
         return new Promise((resolve, reject) => {
-          const user = _find(users, { id: params.id });
-          if (user) {
+          const user = (params.userName && params.password)
+            ? _find(users, { userName: params.userName })
+            : undefined;
+          const isPasswordCorrect = user
+            ? user.password.toLowerCase() === params.password.toLowerCase()
+            : false;
+          if (user && isPasswordCorrect) {
             setTimeout(() => {
-              resolve({
-                id: user.id,
-                userName: user.username,
-                email: user.email,
-                password: user.password,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                token: getFakeToken(),
-              });
+              resolve(resolveUser(user, false));
             }, FAKE_API_RETENTION_TIME);
           } else {
             reject(new Error('Username or password is incorrect'));
           }
         });
-      case '/refreshtoken':
+      case API_PATH_SIGNUP:
+        return new Promise((resolve, reject) => {
+          const signUpResponse = getSignUpResponse(params);
+          if (signUpResponse.isValid) {
+            setTimeout(() => {
+              resolve(resolveUser(signUpResponse, true));
+            }, FAKE_API_RETENTION_TIME);
+          } else {
+            reject(new Error(signUpResponse.error.message));
+          }
+        });
+      case API_PATH_REFRESH_TOKEN:
         return new Promise((resolve) => {
           setTimeout(() => {
             resolve({ ...getFakeToken('refresh') });

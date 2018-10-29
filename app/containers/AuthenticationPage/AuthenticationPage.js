@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import PropTypes from 'prop-types';
 import './style.scss';
+import { FORM_ICON_STYLE } from '../../shared/constants';
 
 const FormItem = Form.Item;
 
@@ -11,6 +12,7 @@ class AuthenticationPage extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        this.props.onSignIn(values);
       }
     });
   };
@@ -24,28 +26,27 @@ class AuthenticationPage extends React.Component {
             {getFieldDecorator('userName', {
               rules: [{ required: true, message: 'Please input your username!' }],
             })(
-              <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
+              <Input prefix={<Icon type="user" style={FORM_ICON_STYLE} />} placeholder="Username" />
             )}
           </FormItem>
           <FormItem>
             {getFieldDecorator('password', {
               rules: [{ required: true, message: 'Please input your Password!' }],
             })(
-              <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
+              <Input prefix={<Icon type="lock" style={FORM_ICON_STYLE} />} type="password" placeholder="Password" />
             )}
           </FormItem>
           <FormItem>
-            {getFieldDecorator('remember', {
+            {getFieldDecorator('rememberMe', {
               valuePropName: 'checked',
               initialValue: true,
             })(
               <Checkbox>Remember me</Checkbox>
             )}
             <a className="login-form-forgot" href="">Forgot password</a>
-            <Button type="primary" htmlType="submit" className="login-form-button">
-              Log in
-            </Button>
-            Or <a href="">register now!</a>
+            <Button type="primary" htmlType="submit" className="login-form-button">Log in</Button>
+            <span>Or </span>
+            <a href="">register now!</a>
           </FormItem>
         </Form>
       </div>
@@ -54,20 +55,10 @@ class AuthenticationPage extends React.Component {
   }
 }
 
-// AuthenticationPage.propTypes = {
-//   loading: PropTypes.bool,
-//   error: PropTypes.oneOfType([
-//     PropTypes.object,
-//     PropTypes.bool,
-//   ]),
-//   repos: PropTypes.oneOfType([
-//     PropTypes.array,
-//     PropTypes.bool,
-//   ]),
-//   onSubmitForm: PropTypes.func,
-//   username: PropTypes.string,
-//   onChangeUsername: PropTypes.func,
-// };
+AuthenticationPage.propTypes = {
+  onSignIn: PropTypes.func,
+  form: PropTypes.object,
+};
 
 const WrappedAuthenticationPage = Form.create()(AuthenticationPage);
 export default WrappedAuthenticationPage;

@@ -18,6 +18,7 @@ export class AuthToken {
 }
 
 class AuthService {
+  // New axios instance created to prevent circular dependency
   connection = axios.create({
     baseURL: BASE_URL,
     timeout: API_TIMEOUT,

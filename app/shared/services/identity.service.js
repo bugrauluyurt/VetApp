@@ -26,9 +26,9 @@ class IdentityService {
   // *** Connection instance ***
   connection = ConnectionFactoryService.getConnection();
 
-  signIn(userName, password, rememberMe) {
+  signIn(params) {
+    // Params: { userName, password, rememberMe };
     return new Promise((resolve, reject) => {
-      const params = { userName, password, rememberMe };
       this.connection
         .setPath(API_PATH_SIGNIN)
         .get(params)

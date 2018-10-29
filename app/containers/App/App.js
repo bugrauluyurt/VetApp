@@ -14,9 +14,8 @@ import HomePage from 'containers/HomePage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import AuthenticationPage from 'containers/AuthenticationPage/Loadable';
-import Header from 'components/Header';
-import Footer from 'components/Footer';
 import './style.scss';
+import { ROUTE_PATH_AUTHENTICATION, ROUTE_PATH_FEATURES, ROUTE_PATH_ROOT } from '../../shared/constants';
 
 const App = () => (
   <div className="app-wrapper">
@@ -27,9 +26,9 @@ const App = () => (
       <meta name="description" content="VetCMS Application" />
     </Helmet>
     <Switch>
-      <Route exact path="/" component={HomePage} />
-      <Route path="/authentication" component={AuthenticationPage} />
-      <Route path="/features" component={FeaturePage} />
+      <Route exact path={ROUTE_PATH_ROOT} component={HomePage} />
+      <Route path={ROUTE_PATH_AUTHENTICATION} component={AuthenticationPage} />
+      <Route path={ROUTE_PATH_FEATURES} component={FeaturePage} />
       <Route path="" component={NotFoundPage} />
     </Switch>
   </div>

@@ -4,11 +4,12 @@ import {
   SIGNIN_USER_ERROR,
 } from './constants';
 
-export function signIn(username, password) {
+export function signIn({ userName, password, rememberMe }) {
   return {
     type: SIGNIN_USER,
-    username,
+    userName,
     password,
+    rememberMe
   };
 }
 

@@ -8,11 +8,10 @@ import saga from './saga';
 import AuthenticationPage from './AuthenticationPage';
 
 const mapDispatchToProps = (dispatch) => ({
-  onSignIn: (username, password, rememberMe) => dispatch(signIn(username, password, rememberMe)),
+  onSignIn: (params) => dispatch(signIn(params)),
 });
 
 const withConnect = connect(undefined, mapDispatchToProps);
-
 const withReducer = injectReducer({ key: 'authentication', reducer });
 const withSaga = injectSaga({ key: 'authentication', saga });
 

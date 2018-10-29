@@ -1,9 +1,11 @@
-import { instance as ConnectionFactoryService } from './connection.service';
+import { instance as ConnectionService } from './connection.service';
 import { AuthToken, instance as AuthService } from './auth.service';
 import { instance as LocalForage } from './localforage.service';
 import { API_PATH_SIGNIN, API_PATH_SIGNUP } from '../constants';
 
-function handleAuthoriationSuccess(resolve, params) {
+const APIConnection = ConnectionService.getConnection();
+
+function handleAuthorizationSuccess(resolve, params) {
   return (response) => {
     const token = new AuthToken(response.token);
     AuthService.setToken(token);
@@ -23,16 +25,13 @@ function handleAuthorizationError(reject) {
 }
 
 class IdentityService {
-  // *** Connection instance ***
-  connection = ConnectionFactoryService.getConnection();
-
   signIn(params) {
     // Params: { userName, password, rememberMe };
     return new Promise((resolve, reject) => {
-      this.connection
+      APIConnection
         .setPath(API_PATH_SIGNIN)
         .get(params)
-        .then(handleAuthoriationSuccess(resolve, params))
+        .then(handleAuthorizationSuccess(resolve, params))
         .catch(handleAuthorizationError(reject));
     });
   }
@@ -40,10 +39,10 @@ class IdentityService {
   signUp(params) {
     // Params: { userName, firstName, lastName, email, password, rememberMe };
     return new Promise((resolve, reject) => {
-      this.connection
+      APIConnection
         .setPath(API_PATH_SIGNUP)
         .get(params)
-        .then(handleAuthoriationSuccess(resolve, params))
+        .then(handleAuthorizationSuccess(resolve, params))
         .catch(handleAuthorizationError(reject));
     });
   }

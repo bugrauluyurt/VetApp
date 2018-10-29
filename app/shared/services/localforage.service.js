@@ -15,8 +15,8 @@ class LocalForageService {
   }
 
   setItem(key, value, instance, callback) {
-    this.checkInstance(instance);
-    return this.instanceStorage[instance].setItem(key, value)
+    const availableInstance = this.checkInstance(instance);
+    return this.instanceStorage[availableInstance].setItem(key, value)
       .then(() => {
         const item = { key, value, type: 'set' };
         if (callback) {
@@ -27,8 +27,8 @@ class LocalForageService {
   }
 
   getItem(key, instance, callback) {
-    this.checkInstance(instance);
-    return this.instanceStorage[instance].getItem(key)
+    const availableInstance = this.checkInstance(instance);
+    return this.instanceStorage[availableInstance].getItem(key)
       .then((value) => {
         const item = { key, value, type: 'get' };
         if (callback) {
@@ -43,7 +43,7 @@ class LocalForageService {
     if (!this.instanceStorage[processedInstance]) {
       this.createInstance(processedInstance);
     }
-    return instance;
+    return processedInstance;
   }
 
   destroy(instance) {

@@ -7,17 +7,17 @@ export const FAKE_API_RETENTION_TIME = 2500;
 export const users = [
   {
     id: 1,
-    userName: 'john_doe@gmail.com',
+    userName: 'john_doe',
     email: 'john_doe@gmail.com',
-    password: '1234',
+    password: '123456',
     firstName: 'John',
     lastName: 'Doe'
   },
   {
     id: 2,
-    userName: 'jane_doe@gmail.com',
+    userName: 'jane_doe',
     email: 'jane_doe@gmail.com',
-    password: '1234',
+    password: '123456',
     firstName: 'Jane',
     lastName: 'Doe'
   },
@@ -61,11 +61,11 @@ export function getSignUpResponse({
     return response;
   }
   const validityCheckObj = {
-    isUserNameValid: userName.length > USERNAME_MIN_LENGTH,
-    isFirstNameValid: firstName.length > FIRSTNAME_MIN_LENGTH,
-    isLastNameValid: lastName.length > LASTNAME_MIN_LENGTH,
+    isUserNameValid: userName.length >= USERNAME_MIN_LENGTH,
+    isFirstNameValid: firstName.length >= FIRSTNAME_MIN_LENGTH,
+    isLastNameValid: lastName.length >= LASTNAME_MIN_LENGTH,
     isEmailValid: validateEmail(email),
-    isPasswordValid: password.length > PASSWORD_MIN_LENGTH
+    isPasswordValid: password.length >= PASSWORD_MIN_LENGTH
   };
   let errorMessage;
   let errorMessageType;

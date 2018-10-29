@@ -1,7 +1,7 @@
 import * as _cloneDeep from 'lodash/cloneDeep';
 import axios from 'axios';
 import { instance as LocalForage } from './localforage.service';
-import { API_TIMEOUT, BASE_URL } from '../constants';
+import { API_TIMEOUT, API_BASE_URL, API_SECURE, API_PORT } from '../constants';
 
 const TOKEN_EXPIRATION_TIME_DEFAULT = 60 * 1000000; // min
 const TOKEN_EXPIRATION_BUFFER = 60 * 1000; // sec
@@ -13,14 +13,14 @@ export class AuthToken {
   constructor(token) {
     this.body = token.access_token;
     this.expiresIn = token.expires_in || TOKEN_EXPIRATION_TIME_DEFAULT;
-    this.timeReceived = new Date();
+    this.timeReceived = (new Date()).getTime();
   }
 }
 
 class AuthService {
   // New axios instance created to prevent circular dependency
   connection = axios.create({
-    baseURL: BASE_URL,
+    baseURL: `http${API_SECURE ? 's' : ''}://${API_BASE_URL}:${API_PORT}`,
     timeout: API_TIMEOUT,
   });
   tokenRefreshing = false;
@@ -45,7 +45,7 @@ class AuthService {
     this.token = token;
     this.destroyTimeout();
     const expirationTime = (token.timeReceived + token.expiresIn);
-    const now = new Date();
+    const now = (new Date()).getTime();
     this.tokenTimeoutCounter = setTimeout(
       this.refreshToken,
       (expirationTime - now - TOKEN_EXPIRATION_BUFFER)
@@ -84,13 +84,13 @@ class AuthService {
 
   static isTokenExpired(token) {
     const expirationTime = (token.timeReceived + token.expiresIn);
-    const now = new Date();
+    const now = (new Date()).getTime();
     return (expirationTime - TOKEN_EXPIRATION_BUFFER) < now;
   }
 
   destroyTimeout() {
-    if (!this.tokenTimeoutCounter) return;
-    this.tokenTimeoutCounter.clearTimeout();
+    if (!this.tokenTimeoutCounter || !window) return;
+    window.clearTimeout(this.tokenTimeoutCounter);
   }
 
   destroy() {

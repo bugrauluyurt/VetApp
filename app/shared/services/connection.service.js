@@ -5,7 +5,16 @@ import { instance as AuthService } from './auth.service';
 import { instance as LoggerService, constructor as LoggerServiceConstructor } from './logger.service';
 
 import { getFakeToken, users, FAKE_API_RETENTION_TIME, getSignUpResponse, resolveUser } from '../fakeApiAssets';
-import { API_TIMEOUT, BASE_URL, API_PATH_SIGNIN, API_PATH_SIGNUP, API_PATH_REFRESH_TOKEN } from '../constants';
+import {
+  API_TIMEOUT,
+  API_PORT,
+  API_BASE_URL,
+  API_PATH_SIGNIN,
+  API_PATH_SIGNUP,
+  API_PATH_SIGNOUT,
+  API_PATH_REFRESH_TOKEN,
+  API_SECURE,
+} from '../constants';
 
 class BaseConnection {
   static METHOD_GET = 'get';
@@ -13,7 +22,7 @@ class BaseConnection {
   static METHOD_PUT = 'put';
   static METHOD_DELETE = 'delete';
 
-  static INTERCEPTED_URI = [API_PATH_SIGNIN, API_PATH_SIGNIN, API_PATH_REFRESH_TOKEN];
+  static INTERCEPTED_URI = [API_PATH_SIGNIN, API_PATH_SIGNOUT, API_PATH_SIGNUP, API_PATH_REFRESH_TOKEN];
 
   constructor(axiosInstance, serviceUrl) {
     this.serviceUrl = serviceUrl;
@@ -21,6 +30,7 @@ class BaseConnection {
   }
 
   setPath(url) {
+    console.log('********* SetPath called *********');
     this.url = url;
     return this;
   }
@@ -91,7 +101,7 @@ class BaseConnection {
   requestInterception(method, params) {
     let future;
     let isIntercepted = false;
-    if (BaseConnection.INTERCEPTED_URI.indexOf(method) !== -1) {
+    if (BaseConnection.INTERCEPTED_URI.indexOf(this.url) !== -1) {
       isIntercepted = true;
       const futureValue = this.getInterceptionFutureValue(method, params);
       if (futureValue) {
@@ -110,14 +120,18 @@ class BaseConnection {
 
   handleRequestError() {
     return (error) => {
-      LoggerService.log(error.message, LoggerServiceConstructor.LOG_TYPE_ERROR);
+      LoggerService.log(error.message, 'Error', LoggerServiceConstructor.LOG_TYPE_ERROR);
       throw new Error(error.message);
     };
   }
 
   request(method, params, options) {
-    const requestInterception = this.requestInterception(method, params, options);
+    LoggerService.log({
+      url: this.url, method, params, options
+    }, 'Request');
+    const requestInterception = this.requestInterception(method, params);
     if (requestInterception.intercepted && requestInterception.future) {
+      LoggerService.log(requestInterception, 'Request Intercepted');
       return requestInterception.future;
     }
     const config = this.prepareConfig(method, params, options);
@@ -159,13 +173,10 @@ class BaseConnection {
 }
 
 class ConnectionFactoryService {
-  static baseURL = BASE_URL;
-  static timeout = API_TIMEOUT;
-
   constructor() {
     this.axiosInstance = axios.create({
-      baseURL: ConnectionFactoryService.baseURL,
-      timeout: ConnectionFactoryService.timeout,
+      baseURL: `http${API_SECURE ? 's' : ''}://${API_BASE_URL}:${API_PORT}`,
+      timeout: API_TIMEOUT,
     });
     // Creates a generic default connection
     this.connection = this.create();

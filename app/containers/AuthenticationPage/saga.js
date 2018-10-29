@@ -14,6 +14,7 @@ export function* getSignInData(action) {
     yield put(signInSuccess(userData));
     yield put(push(ROUTE_PATH_FEATURES));
   } catch (error) {
+    console.log('Error', error);
     yield put(signInError(error));
   }
 }

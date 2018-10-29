@@ -6,6 +6,7 @@ import { signIn } from './actions';
 import reducer from './reducer';
 import saga from './saga';
 import AuthenticationPage from './AuthenticationPage';
+import '../../shared/services/localforage.service';
 
 const mapDispatchToProps = (dispatch) => ({
   onSignIn: (params) => dispatch(signIn(params)),

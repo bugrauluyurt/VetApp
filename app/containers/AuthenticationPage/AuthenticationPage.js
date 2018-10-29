@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import PropTypes from 'prop-types';
 import './style.scss';
+import { instance as LoggerService } from '../../shared/services/logger.service';
 import { FORM_ICON_STYLE } from '../../shared/constants';
 
 const FormItem = Form.Item;
@@ -11,7 +12,7 @@ class AuthenticationPage extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        LoggerService.log(values, 'Received values of form');
         this.props.onSignIn(values);
       }
     });

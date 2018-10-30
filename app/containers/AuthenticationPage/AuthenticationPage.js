@@ -61,5 +61,4 @@ AuthenticationPage.propTypes = {
   form: PropTypes.object,
 };
 
-const WrappedAuthenticationPage = Form.create()(AuthenticationPage);
-export default WrappedAuthenticationPage;
+export default AuthenticationPage;

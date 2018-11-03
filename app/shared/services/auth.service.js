@@ -1,7 +1,9 @@
 import * as _cloneDeep from 'lodash/cloneDeep';
 import axios from 'axios';
+import _omit from 'lodash/omit';
 import { instance as LocalForage } from './localforage.service';
 import { API_TIMEOUT, API_BASE_URL, API_SECURE, API_PORT } from '../constants';
+import { instance as LoggerService } from './logger.service';
 
 const TOKEN_EXPIRATION_TIME_DEFAULT = 60 * 1000000; // min
 const TOKEN_EXPIRATION_BUFFER = 60 * 1000; // sec
@@ -36,8 +38,11 @@ class AuthService {
         if (!isTokenExpired) {
           this.setToken(existingUser.token);
         }
-        resolve({ ...existingUser, isTokenExpired });
-      }).catch(() => resolve({ isTokenExpired: undefined }));
+        resolve({ user: _omit(existingUser, ['token']), isTokenExpired });
+      }).catch(() => {
+        LoggerService.log('No user in localForage', 'Authentication');
+        resolve({ isTokenExpired: undefined });
+      });
     });
   }
 

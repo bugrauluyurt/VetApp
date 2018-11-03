@@ -34,7 +34,7 @@ class LocalForageService {
         if (callback) {
           callback(item);
         }
-        return item;
+        return value;
       });
   }
 

@@ -11,14 +11,14 @@
  */
 import { fromJS } from 'immutable';
 
-import { SIGNIN_USER, SIGNIN_USER_SUCCESS, SIGNIN_USER_ERROR } from './constants';
+import { SIGNIN_USER, SIGNIN_USER_SUCCESS, SIGNIN_USER_ERROR, UPDATE_USER } from './constants';
 
 // The initial state of the App
 const initialState = fromJS({
   loading: false,
   error: false,
   errorEnum: '',
-  userData: {},
+  data: {},
 });
 
 function authenticationReducer(state = initialState, action) {
@@ -31,12 +31,14 @@ function authenticationReducer(state = initialState, action) {
     case SIGNIN_USER_SUCCESS:
       return state
         .set('loading', false)
-        .set('userData', action.userData);
+        .set('data', action.userData);
     case SIGNIN_USER_ERROR:
       return state
         .set('loading', false)
         .set('error', true)
         .set('errorEnum', action.errorEnum);
+    case UPDATE_USER:
+      return state.set('data', action.user);
     default:
       return state;
   }

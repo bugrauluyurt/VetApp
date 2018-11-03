@@ -11,9 +11,6 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
           <img src={Banner} alt="react-redux-boilerplate - Logo" />
         </a>
         <div className="nav-bar">
-          <Link className="router-link" to="/">
-            Home
-          </Link>
           <Link className="router-link" to="/features">
             Features
           </Link>

@@ -1,3 +1,17 @@
-.app-wrapper {
+.App {
   height: 100%;
+
+  &__wrapper {
+    height: 100%;
+
+    .loading {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .routes {
+      height: 100%;
+    }
+  }
 }

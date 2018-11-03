@@ -16,48 +16,25 @@
  */
 
 import {
-  LOAD_REPOS,
-  LOAD_REPOS_SUCCESS,
-  LOAD_REPOS_ERROR,
+  INIT_APP,
+  INIT_APP_SUCCESS,
+  INIT_APP_ERROR,
 } from './constants';
 
-/**
- * Load the repositories, this action starts the request saga
- *
- * @return {object} An action object with a type of LOAD_REPOS
- */
-export function loadRepos() {
+export function initApp() {
   return {
-    type: LOAD_REPOS,
+    type: INIT_APP,
   };
 }
 
-/**
- * Dispatched when the repositories are loaded by the request saga
- *
- * @param  {array} repos The repository data
- * @param  {string} username The current username
- *
- * @return {object}      An action object with a type of LOAD_REPOS_SUCCESS passing the repos
- */
-export function reposLoaded(repos, username) {
+export function initAppSuccess() {
   return {
-    type: LOAD_REPOS_SUCCESS,
-    repos,
-    username,
+    type: INIT_APP_SUCCESS,
   };
 }
 
-/**
- * Dispatched when loading the repositories fails
- *
- * @param  {object} error The error
- *
- * @return {object}       An action object with a type of LOAD_REPOS_ERROR passing the error
- */
-export function repoLoadingError(error) {
+export function initAppError() {
   return {
-    type: LOAD_REPOS_ERROR,
-    error,
+    type: INIT_APP_ERROR,
   };
 }

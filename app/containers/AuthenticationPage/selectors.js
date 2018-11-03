@@ -4,7 +4,7 @@
 
 import { createSelector } from 'reselect';
 
-const selectAuthentication = (state) => state.get('authentication');
+const selectAuthentication = (state) => state.get('user');
 
 const makeSelectLoading = () => createSelector(
   selectAuthentication,

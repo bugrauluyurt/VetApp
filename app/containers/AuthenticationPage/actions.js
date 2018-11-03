@@ -23,6 +23,6 @@ export function signInSuccess(userData) {
 export function signInError(error) {
   return {
     type: SIGNIN_USER_ERROR,
-    error
+    errorEnum: error.message
   };
 }

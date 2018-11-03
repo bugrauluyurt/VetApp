@@ -27,7 +27,8 @@ import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 
 // Import CSS reset and Global Styles
 import 'styles/theme.scss';
-
+// Import connection service to instantiate it
+import { instance } from './shared/services/connection.service';
 import configureStore from './configureStore';
 
 // Observe loading of Open Sans (to remove open sans, remove the <link> tag in

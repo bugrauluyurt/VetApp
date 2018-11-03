@@ -17,6 +17,7 @@ import { SIGNIN_USER, SIGNIN_USER_SUCCESS, SIGNIN_USER_ERROR } from './constants
 const initialState = fromJS({
   loading: false,
   error: false,
+  errorEnum: '',
   userData: {},
 });
 
@@ -25,7 +26,8 @@ function authenticationReducer(state = initialState, action) {
     case SIGNIN_USER:
       return state
         .set('loading', true)
-        .set('error', false);
+        .set('error', false)
+        .set('errorEnum', '');
     case SIGNIN_USER_SUCCESS:
       return state
         .set('loading', false)
@@ -33,7 +35,8 @@ function authenticationReducer(state = initialState, action) {
     case SIGNIN_USER_ERROR:
       return state
         .set('loading', false)
-        .set('error', true);
+        .set('error', true)
+        .set('errorEnum', action.errorEnum);
     default:
       return state;
   }

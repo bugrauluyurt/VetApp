@@ -4,7 +4,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
+  .ant-alert {
+    margin-bottom: 20px;
+  }
   .login-form {
     max-width: 300px;
   }

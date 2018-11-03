@@ -15,6 +15,7 @@ import {
   API_PATH_REFRESH_TOKEN,
   API_SECURE,
 } from '../constants';
+import { ENUM_ERROR_INCORRECT_CREDENTIALS } from '../enums';
 
 class BaseConnection {
   static METHOD_GET = 'get';
@@ -30,7 +31,6 @@ class BaseConnection {
   }
 
   setPath(url) {
-    console.log('********* SetPath called *********');
     this.url = url;
     return this;
   }
@@ -73,7 +73,7 @@ class BaseConnection {
               resolve(resolveUser(user, false));
             }, FAKE_API_RETENTION_TIME);
           } else {
-            reject(new Error('Username or password is incorrect'));
+            reject(new Error(ENUM_ERROR_INCORRECT_CREDENTIALS));
           }
         });
       case API_PATH_SIGNUP:
@@ -84,7 +84,7 @@ class BaseConnection {
               resolve(resolveUser(signUpResponse, true));
             }, FAKE_API_RETENTION_TIME);
           } else {
-            reject(new Error(signUpResponse.error.message));
+            reject(new Error(signUpResponse.error.enum));
           }
         });
       case API_PATH_REFRESH_TOKEN:
@@ -194,4 +194,5 @@ class ConnectionFactoryService {
 
 export const constructor = ConnectionFactoryService;
 export const instance = new ConnectionFactoryService();
+export const APIConnection = instance.getConnection();
 export default instance;

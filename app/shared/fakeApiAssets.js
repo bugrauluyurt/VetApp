@@ -1,3 +1,9 @@
+import {
+  ENUM_ERORR_FIRSTNAME_LENGTH_INVALID, ENUM_ERORR_LASTNAME_LENGTH_INVALID,
+  ENUM_ERORR_USERNAME_LENGTH_INVALID, ENUM_ERROR_EMAIL_INVALID,
+  ENUM_ERROR_INVALID_PARAMS, ENUM_ERROR_PASSWORD_INVALID,
+} from './enums';
+
 export const USERNAME_MIN_LENGTH = 3;
 export const FIRSTNAME_MIN_LENGTH = 2;
 export const LASTNAME_MIN_LENGTH = 2;
@@ -57,7 +63,7 @@ export function getSignUpResponse({
   const response = {};
   if (!userName || !email || !password) {
     response.isValid = false;
-    response.error = { message: 'Invalid params', type: 1 };
+    response.error = { enum: ENUM_ERROR_INVALID_PARAMS, type: 1 };
     return response;
   }
   const validityCheckObj = {
@@ -77,23 +83,23 @@ export function getSignUpResponse({
       switch (validityKey) {
         case 'isUserNameValid':
           errorMessageType = 2;
-          errorMessage = `Username length should be greater than three ${USERNAME_MIN_LENGTH}`;
+          errorMessage = ENUM_ERORR_USERNAME_LENGTH_INVALID;
           break;
         case 'isFirstNameValid':
           errorMessageType = 3;
-          errorMessage = `Firstname length should be greater than three ${FIRSTNAME_MIN_LENGTH}`;
+          errorMessage = ENUM_ERORR_FIRSTNAME_LENGTH_INVALID;
           break;
         case 'isLastNameValid':
           errorMessageType = 4;
-          errorMessage = `Lastname length should be greater than three ${LASTNAME_MIN_LENGTH}`;
+          errorMessage = ENUM_ERORR_LASTNAME_LENGTH_INVALID;
           break;
         case 'isEmailValid':
           errorMessageType = 5;
-          errorMessage = 'Please enter a valid email address';
+          errorMessage = ENUM_ERROR_EMAIL_INVALID;
           break;
         case 'isPasswordValid':
           errorMessageType = 6;
-          errorMessage = 'Password invalid';
+          errorMessage = ENUM_ERROR_PASSWORD_INVALID;
           break;
         default:
           errorMessage = undefined;
@@ -103,7 +109,7 @@ export function getSignUpResponse({
   });
   response.isValid = isValid;
   if (errorMessage && errorMessageType) {
-    response.error = { message: errorMessage, type: errorMessageType };
+    response.error = { enum: errorMessage, type: errorMessageType };
   }
   if (isValid) {
     response.userData = { userName, email, password };

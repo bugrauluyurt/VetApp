@@ -1,10 +1,8 @@
 import _omit from 'lodash/omit';
-import { instance as ConnectionService } from './connection.service';
+import { APIConnection } from './connection.service';
 import { AuthToken, instance as AuthService } from './auth.service';
 import { instance as LocalForage } from './localforage.service';
 import { API_PATH_SIGNIN, API_PATH_SIGNUP } from '../constants';
-
-const APIConnection = ConnectionService.getConnection();
 
 function handleAuthorizationSuccess(resolve, params) {
   return (response) => {
@@ -23,6 +21,7 @@ function handleAuthorizationError(reject) {
   return (error) => {
     AuthService.destroy();
     LocalForage.destroy().then(() => reject(error));
+    return error;
   };
 }
 

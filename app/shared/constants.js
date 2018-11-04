@@ -14,6 +14,8 @@ export const ROUTE_PATH_ROOT = '/';
 export const ROUTE_PATH_FEATURES = '/features';
 export const ROUTE_PATH_AUTHENTICATION = '/authentication';
 
+export const ROUTE_PATH_DEFAULT = '/features';
+
 // FORM ICON STYLE
 export const FORM_ICON_STYLE = {
   color: 'rgba(0,0,0,.25)',

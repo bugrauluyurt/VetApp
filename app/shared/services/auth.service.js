@@ -87,6 +87,10 @@ class AuthService {
     return this.tokenRefreshing;
   }
 
+  isAuthenticated() {
+    return !!this.token;
+  }
+
   static isTokenExpired(token) {
     const expirationTime = (token.timeReceived + token.expiresIn);
     const now = (new Date()).getTime();

@@ -45,7 +45,6 @@ export function resolveUser(userDetails, isNew) {
     id: isNew ? users.length + 1 : userDetails.id,
     userName: userDetails.userName,
     email: userDetails.email,
-    password: userDetails.password,
     firstName: userDetails.firstName,
     lastName: userDetails.lastName,
     token: getFakeToken(),

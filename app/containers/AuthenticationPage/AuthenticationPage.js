@@ -1,13 +1,20 @@
 import React from 'react';
 import { Form, Icon, Input, Button, Checkbox, Alert } from 'antd';
 import PropTypes from 'prop-types';
+import { instance as AuthService } from '../../shared/services/auth.service'
 import './style.scss';
 import { instance as LoggerService } from '../../shared/services/logger.service';
-import { FORM_ICON_STYLE } from '../../shared/constants';
+import { FORM_ICON_STYLE, ROUTE_PATH_DEFAULT } from '../../shared/constants';
 
 const FormItem = Form.Item;
 
 class AuthenticationPage extends React.Component {
+  componentWillMount() {
+    if (AuthService.isAuthenticated()) {
+      this.props.history.push(ROUTE_PATH_DEFAULT);
+    }
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -68,6 +75,9 @@ AuthenticationPage.propTypes = {
   errorEnum: PropTypes.string,
   error: PropTypes.bool,
   loading: PropTypes.bool,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }).isRequired,
 };
 
 export default AuthenticationPage;

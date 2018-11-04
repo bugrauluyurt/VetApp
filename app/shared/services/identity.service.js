@@ -8,10 +8,13 @@ function handleAuthorizationSuccess(resolve, params) {
   return (response) => {
     const token = new AuthToken(response.token);
     AuthService.setToken(token);
-    if (!params.rememberMe) {
-      resolve(response);
-    }
     const filteredData = _omit(response, ['password']);
+    console.log('Params from login', params);
+    console.log('Response', response);
+    if (!params.rememberMe) {
+      resolve(filteredData);
+      return;
+    }
     const user = { ...filteredData, token };
     LocalForage.setItem('user', user).then(() => resolve(user));
   };

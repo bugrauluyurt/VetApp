@@ -9,12 +9,11 @@ export const API_PATH_SIGNUP = '/signup';
 export const API_PATH_SIGNOUT = '/signout';
 export const API_PATH_REFRESH_TOKEN = '/refreshtoken';
 
-// ROUTE PATHS
-export const ROUTE_PATH_ROOT = '/';
+// ROUTES
+export const ROUTE_PATH_DEFAULT = '/';
 export const ROUTE_PATH_FEATURES = '/features';
 export const ROUTE_PATH_AUTHENTICATION = '/authentication';
-
-export const ROUTE_PATH_DEFAULT = '/features';
+export const ROUTE_PATH_NOTFOUND = '';
 
 // FORM ICON STYLE
 export const FORM_ICON_STYLE = {

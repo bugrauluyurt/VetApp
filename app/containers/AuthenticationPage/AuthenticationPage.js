@@ -1,10 +1,11 @@
 import React from 'react';
 import { Form, Icon, Input, Button, Checkbox, Alert } from 'antd';
 import PropTypes from 'prop-types';
-import { instance as AuthService } from '../../shared/services/auth.service'
+import { instance as AuthService } from '../../shared/services/auth.service';
 import './style.scss';
 import { instance as LoggerService } from '../../shared/services/logger.service';
 import { FORM_ICON_STYLE, ROUTE_PATH_DEFAULT } from '../../shared/constants';
+
 
 const FormItem = Form.Item;
 

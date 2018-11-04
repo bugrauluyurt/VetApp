@@ -1,23 +1,10 @@
-/**
- *
- * App
- *
- * This component is the skeleton around the actual pages, and should only
- * contain code that should be seen on all pages. (e.g. navigation bar)
- */
-
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { Switch, Route } from 'react-router-dom';
-
-import FeaturePage from 'containers/FeaturePage/Loadable';
-import NotFoundPage from 'containers/NotFoundPage/Loadable';
-import AuthenticationPage from 'containers/AuthenticationPage/Loadable';
 import PropTypes from 'prop-types';
 import { Spin } from 'antd';
 import { instance as AuthenticationService } from '../../shared/services/auth.service';
 import './style.scss';
-import { ROUTE_PATH_AUTHENTICATION, ROUTE_PATH_FEATURES } from '../../shared/constants';
+import renderRoutes from '../../routes';
 
 class App extends React.Component {
   constructor(props) {
@@ -62,15 +49,7 @@ class App extends React.Component {
         </Helmet>
         <div className="App__wrapper">
           { loading && <div className="loading"><Spin size="large" /></div> }
-          { !loading && !error && (
-            <div className="routes">
-              <Switch>
-                <Route path={ROUTE_PATH_AUTHENTICATION} component={AuthenticationPage} />
-                <Route path={ROUTE_PATH_FEATURES} component={FeaturePage} />
-                <Route path="" component={NotFoundPage} />
-              </Switch>
-            </div>
-          ) }
+          { !loading && !error && renderRoutes() }
           { !loading && error && (
             <div className="error">
               <p>An error occured while loading the app please retry</p>
